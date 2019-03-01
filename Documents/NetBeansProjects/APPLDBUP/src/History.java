@@ -11,7 +11,14 @@
 public class History {
     private String keterangan;
     private double amount;
+    private boolean sDeposit;
 
+    public History(String keterangan, double amount, boolean sDeposit) {
+        this.keterangan = keterangan;
+        this.amount = amount;
+        this.sDeposit = sDeposit;
+    }
+    
     public History(String keterangan, double amount) {
         this.keterangan = keterangan;
         this.amount = amount;
@@ -24,6 +31,15 @@ public class History {
     public String getKeterangan() {
         return keterangan;
     }
+
+    public boolean issDeposit() {
+        return sDeposit;
+    }
+
+    public void setsDeposit(boolean sDeposit) {
+        this.sDeposit = sDeposit;
+    }
+    
     
     
 }

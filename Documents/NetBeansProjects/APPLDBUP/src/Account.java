@@ -54,12 +54,12 @@ public class Account {
     public void credit(double amount) {
         availableBalance -= amount;
         totalBalance -= amount;
-        addHistory(1, amount);
+        addHistory(1, amount,false);
     }
     
     public void debit(double amount) {
         totalBalance += amount;
-        addHistory(1, amount);
+        addHistory(1, amount,true);
     }
     
     public int getAccountNumber() {
@@ -74,13 +74,13 @@ public class Account {
         return histories;
     }
     
-    public void addHistory(int transaction, double amount) {
+    public void addHistory(int transaction, double amount, boolean sDeposit) {
         String keterangan = null;
         if (transaction == 1) {
             keterangan = "Withdrawal";
         } else if (transaction == 2) {
             keterangan = "Deposit";
         }
-        histories.add(new History(keterangan, amount));
+        histories.add(new History(keterangan, amount, sDeposit));
     }
 }
