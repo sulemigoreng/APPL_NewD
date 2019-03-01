@@ -2,9 +2,10 @@ public class BankDatabase {
    private Account[] accounts; // array of Accounts
    
    public BankDatabase() {
-      accounts = new Account[2]; // just 2 accounts for testing
-      accounts[0] = new Account(12345, 54321, 1000.0, 1200.0);
-      accounts[1] = new Account(8765, 5678, 200.0, 200.0);  
+      accounts = new Account[10]; // just 2 accounts for testing
+      accounts[0] = new Account(12345, 54321, 1000.0, 1200.0,false);
+      accounts[1] = new Account(8765, 5678, 200.0, 200.0,false);
+      accounts[2] = new Account(0, 0, 0, 0,true); 
    }
    
    private Account getAccount(int accountNumber) {
@@ -28,7 +29,14 @@ public class BankDatabase {
          return false; // account number not found, so return false
       }
    } 
-
+   private boolean isAdmin(int accountNumber) {
+      for(Account x : this.accounts){
+          if(x.getAccountNumber()==accountNumber){
+              return x.getAdmin();
+          }
+      }
+      return false; // if no matching account was found, return null
+   }
    public double getAvailableBalance(int userAccountNumber) {
       return getAccount(userAccountNumber).getAvailableBalance();
    } 

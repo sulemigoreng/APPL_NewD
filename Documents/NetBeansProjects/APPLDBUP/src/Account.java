@@ -3,14 +3,18 @@ public class Account {
    private int pin; // PIN for authentication
    private double availableBalance; // funds available for withdrawal
    private double totalBalance; // funds available & pending deposits
+   private boolean blocked;
+   private boolean admin;
 
    // Account constructor initializes attributes
    public Account(int theAccountNumber, int thePIN, 
-      double theAvailableBalance, double theTotalBalance) {
+      double theAvailableBalance, double theTotalBalance,boolean admin) {
       accountNumber = theAccountNumber;
       pin = thePIN;
       availableBalance = theAvailableBalance;
       totalBalance = theTotalBalance;
+      blocked = false;
+      this.admin = admin;
    }
 
    // determines whether a user-specified PIN matches PIN in Account
@@ -44,5 +48,8 @@ public class Account {
 
    public int getAccountNumber() {
       return accountNumber;  
+   }
+   public boolean getAdmin() {
+      return admin;  
    }
 } 
