@@ -10,14 +10,14 @@
  */
 public class History {
     private String keterangan;
-    private int amount;
+    private double amount;
 
-    public History(String keterangan, int amount) {
+    public History(String keterangan, double amount) {
         this.keterangan = keterangan;
         this.amount = amount;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
