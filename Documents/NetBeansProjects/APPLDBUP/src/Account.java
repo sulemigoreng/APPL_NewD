@@ -1,3 +1,6 @@
+
+import java.util.ArrayList;
+
 public class Account {
    private int accountNumber; // account number
    private int pin; // PIN for authentication
@@ -5,7 +8,17 @@ public class Account {
    private double totalBalance; // funds available & pending deposits
    private boolean blocked;
    private boolean admin;
+   private ArrayList<History> histories;
 
+    public Account(int accountNumber, int pin, double availableBalance, double totalBalance, boolean blocked, boolean admin, ArrayList<History> histories) {
+        this.accountNumber = accountNumber;
+        this.pin = pin;
+        this.availableBalance = availableBalance;
+        this.totalBalance = totalBalance;
+        this.blocked = blocked;
+        this.admin = admin;
+        this.histories = histories;
+    }
    // Account constructor initializes attributes
    public Account(int theAccountNumber, int thePIN, 
       double theAvailableBalance, double theTotalBalance,boolean admin) {
@@ -51,5 +64,19 @@ public class Account {
    }
    public boolean getAdmin() {
       return admin;  
+   }
+
+    public ArrayList<History> getHistories() {
+        return histories;
+    }
+   
+   public void addHistory(int transaction, int amount){
+       String keterangan = null;
+       if(transaction == 1){
+           keterangan = "Withdrawal";
+       }else if(transaction ==2){
+           keterangan = "Deposit";
+       }
+       histories.add(new History(keterangan, amount));
    }
 } 

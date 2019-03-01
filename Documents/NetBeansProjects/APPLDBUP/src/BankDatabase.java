@@ -1,3 +1,6 @@
+
+import java.util.ArrayList;
+
 public class BankDatabase {
    private Account[] accounts; // array of Accounts
    
@@ -6,6 +9,7 @@ public class BankDatabase {
       accounts[0] = new Account(12345, 54321, 1000.0, 1200.0,false);
       accounts[1] = new Account(8765, 5678, 200.0, 200.0,false);
       accounts[2] = new Account(0, 0, 0, 0,true); 
+      accounts[3] = new Account(1, 1, 1, 1, false, false, new ArrayList<History>());
    }
    
    private Account getAccount(int accountNumber) {
@@ -52,4 +56,8 @@ public class BankDatabase {
    public void debit(int userAccountNumber, double amount) {
       getAccount(userAccountNumber).debit(amount);
    } 
+   
+   public ArrayList<History> getHistories(int userAccountNumber){
+       return getAccount(userAccountNumber).getHistories();
+   }
 } 
