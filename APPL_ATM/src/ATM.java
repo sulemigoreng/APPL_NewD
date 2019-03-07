@@ -1,3 +1,4 @@
+//HAI INI PAJO
 public class ATM {
    private boolean userAuthenticated; // whether user is authenticated
    private int currentAccountNumber; // current user's account number
