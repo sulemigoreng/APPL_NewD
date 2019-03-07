@@ -5,7 +5,7 @@ public class ATM {
    private Keypad keypad; // ATM's keypad
    private CashDispenser cashDispenser; // ATM's cash dispenser
    private BankDatabase bankDatabase; // account information database
-   private DepositSlot ATMDepositSlot;
+   private DepositSlot ATMDepositSlot; //halo
 
    // constants corresponding to main menu options
    private static final int BALANCE_INQUIRY = 1;
