@@ -10,30 +10,34 @@ public class Account {
     private boolean blocked;
     private boolean admin;
     private ArrayList<History> histories;
+    
+    public Account(int accountNumber, int pin, double availableBalance, double totalBalance, boolean blocked, boolean admin, ArrayList<History> histories) {
+        this.accountNumber = accountNumber;
+        this.pin = pin;
+        this.availableBalance = availableBalance;
+        this.totalBalance = totalBalance;
+        this.blocked = blocked;
+        this.admin = admin;
+        this.histories = histories;
+    }
 
     // Account constructor initializes attributes
     public Account(int theAccountNumber, int thePIN,
-            double theAvailableBalance, double theTotalBalance, boolean blocked, boolean admin, ArrayList<History> histories) {
+            double theAvailableBalance, double theTotalBalance, boolean admin) {
         accountNumber = theAccountNumber;
         pin = thePIN;
         availableBalance = theAvailableBalance;
         totalBalance = theTotalBalance;
-        if (admin) {
-            blocked = false;
-        } else {
-            blocked = true;
-        }
-        this.histories = histories;
+        blocked = false;
         this.admin = admin;
     }
 
-    // Account constructor initializes attributes
     // determines whether a user-specified PIN matches PIN in Account
     public boolean validatePIN(int userPIN) {
         if (userPIN == pin) {
             return true;
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -45,64 +49,38 @@ public class Account {
     // returns the total balance
     public double getTotalBalance() {
         return totalBalance;
-
-    }
-
-    public boolean isBlocked() {
-        return blocked;
-    }
-
+    }    
+    
     public void credit(double amount) {
         availableBalance -= amount;
         totalBalance -= amount;
-        addHistory(1, amount, null);
+        addHistory(1, amount,false);
     }
-
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
-    }
-
-    public void validated(double amount) {
-        availableBalance += amount;
-    }
-
-    public void debit(double amount, Deposit x) {
+    
+    public void debit(double amount) {
         totalBalance += amount;
-        addHistory(2, amount, x);
+        addHistory(1, amount,true);
     }
-
-    public void transfer(double amount) {
-        availableBalance += amount;
-        totalBalance += amount;
-    }
-
+    
     public int getAccountNumber() {
-        return accountNumber;
-
+        return accountNumber;        
     }
 
     public boolean getAdmin() {
-        return admin;
+        return admin;        
     }
-
+    
     public ArrayList<History> getHistories() {
         return histories;
     }
-
-    public void addHistory(int transaction, double amount, Deposit x) {
+    
+    public void addHistory(int transaction, double amount, boolean sDeposit) {
         String keterangan = null;
         if (transaction == 1) {
             keterangan = "Withdrawal";
-            this.histories.add(new History(keterangan, amount));
         } else if (transaction == 2) {
             keterangan = "Deposit";
-            this.histories.add(new History(keterangan, amount, x));
         }
-
+        histories.add(new History(keterangan, amount, sDeposit));
     }
-
-    public void setPin(int pin) {
-        this.pin = pin;
-    }
-
 }

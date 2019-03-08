@@ -5,7 +5,7 @@ public class BalanceInquiry extends Transaction {
 
       super(userAccountNumber, atmScreen, atmBankDatabase);
    } 
-   //Tes commit
+
    // performs the transaction
    @Override
    public void execute() {
