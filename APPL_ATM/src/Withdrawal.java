@@ -26,13 +26,14 @@ public class Withdrawal extends Transaction {
         // get references to bank database and screen
         BankDatabase bankDatabase = getBankDatabase();
         Screen screen = getScreen(); // get screen reference
+        Account account = getBankDatabase().getAccount(getAccountNumber());
+        double limitCash = account.getLimitCash();
 
         // get the total balance for the account involved
         double totalBalance
                 = bankDatabase.getTotalBalance(getAccountNumber());
         amount = displayMenuOfAmounts();
 
-        bankDatabase.getStatus();
         
         if (amount == 6) {
             screen.displayMessageLine("Canceling Transaction...");

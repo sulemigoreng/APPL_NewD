@@ -1,9 +1,14 @@
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ATM {
-    
+
     private boolean userAuthenticated; // whether user is authenticated
     private int currentAccountNumber; // current user's account number
     private Screen screen; // ATM's screen
@@ -13,6 +18,7 @@ public class ATM {
     private DepositSlot ATMDepositSlot;
     private boolean admin;
     private Account acc;
+    private Date tanggal;
 
     // constants corresponding to main menu options
     private static final int BALANCE_INQUIRY = 1;
@@ -26,6 +32,7 @@ public class ATM {
     private static final int CHANGEPIN = 4;
     private static final int DISPLAY_DISPENSER = 3;
     private static final int ADD_DISPENSER = 4;
+    private static final int ATUR_TANGGAL = 6;
 
     // no-argument ATM constructor initializes instance variables
     public ATM() {
@@ -37,6 +44,7 @@ public class ATM {
         bankDatabase = new BankDatabase(); // create acct info database
         ATMDepositSlot = new DepositSlot();
         admin = false;
+        tanggal = new Date();
     }
 
     // start ATM 
@@ -150,7 +158,7 @@ public class ATM {
     private void performTransactions() {
         // local variable to store transaction currently being processed
         Transaction currentTransaction = null;
-        
+
         boolean userExited = false; // user has not chosen to exit
 
         // loop while user has not chosen option to exit system
@@ -172,9 +180,33 @@ public class ATM {
                         // initialize as new object of chosen type
                         addUser();
                         break;
-                    case 6: // user chose to terminate session
-                        screen.displayMessageLine("\nExiting the system...");
-                        userExited = true; // this ATM session should end
+                    case ATUR_TANGGAL:
+                        try {
+                            Account[] accounts = bankDatabase.getAccounts();
+                            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                            String tanggalBaru;
+                            screen.displayMessageLine("Tanggal Sekarang: " + format.format(tanggal));
+                            screen.displayMessage("Masukan Tanggal Baru(mm/DD/"
+                                    + "yyyy): ");
+                            keypad.getDateInput();//makan Enter
+                            tanggalBaru = keypad.getDateInput();
+                            
+                            tanggal = format.parse(tanggalBaru);
+                            for (Account account : accounts) {
+                                if (account.getStatus().toUpperCase().equals("SISWA")) {
+                                    account.setLimitCash(20);
+                                } else if (account.getStatus().toUpperCase().equals("MASA DEPAN")) {
+                                    account.setLimitCash(100);
+                                    account.setLimitTransfer(500);
+                                } else {
+                                    account.setLimitCash(1000);
+                                    account.setLimitTransfer(10000);
+                                }
+                            }
+                        } catch (ParseException ex) {
+                            Logger.getLogger(ATM.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
                         break;
                     case DISPLAY_DISPENSER:
                         cashDispenser.displayDispenser();
@@ -208,7 +240,7 @@ public class ATM {
                         currentTransaction
                                 = createTransaction(mainMenuSelection);
                         currentTransaction.execute();
-                        
+
                         break;
                     case DEPOSIT:
                         currentTransaction
@@ -290,12 +322,13 @@ public class ATM {
             screen.displayMessageLine("3 - Lihat Uang Dispenser");
             screen.displayMessageLine("4 - Tambah Uang Dispenser");
             screen.displayMessageLine("5 - Validasi Deposit");
-            screen.displayMessageLine("6 - Exit\n");
+            screen.displayMessageLine("6 - Atur Tanggal");
+            screen.displayMessageLine("7 - Exit\n");
             screen.displayMessage("Enter a choice: ");
         }
         return keypad.getInput(); // return user's selection
     }
-    
+
     private Transaction createTransaction(int type) {
         Transaction temp = null;
         switch (type) {
@@ -315,7 +348,7 @@ public class ATM {
                 temp = new UbahPIN(currentAccountNumber, screen, bankDatabase, keypad);
                 break;
         }
-        
+
         return temp;
     }
 }

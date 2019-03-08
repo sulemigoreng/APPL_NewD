@@ -27,27 +27,37 @@ public class Transfer extends Transaction {
     public void execute() {
         BankDatabase bankDatabase = getBankDatabase();
         Screen screen = getScreen();
+        Account account = getBankDatabase().getAccount(getAccountNumber());
 
         this.userAccountDest = promptUserAccountDest();
         this.amount = promptForTransferAmount();
-
-        bankDatabase.getStatus();
+        double limitTransfer = account.getLimitTransfer();
 
         if (limitTransfer <= 0) {
             System.out.println("Transfer limited");
         } else {
-            if (limitTransfer <= amount) {
-                System.out.println("Transfer limited");
+            if (!account.getStatus().toUpperCase().equals("SISWA")) {
+                if (limitTransfer <= amount) {
+                    System.out.println("Transfer limited");
+                } else {
+                    limitTransfer -= amount;
+                    if (userAccountDest != null) {
+                        bankDatabase.transferToAccount(getAccountNumber(),
+                                userAccountDest.getAccountNumber(), amount);
+                    } else if (userAccountDest.getAccountNumber() == getAccountNumber()) {
+                        screen.displayMessage("Account Destination is not Available");
+                    }
+                }
             } else {
-                limitTransfer -= amount;
-            }
-            if (userAccountDest != null) {
-                bankDatabase.transferToAccount(getAccountNumber(),
-                        userAccountDest.getAccountNumber(), amount);
+                if (userAccountDest != null) {
+                    bankDatabase.transferToAccount(getAccountNumber(),
+                            userAccountDest.getAccountNumber(), amount);
+                } else if (userAccountDest.getAccountNumber() == getAccountNumber()) {
+                    screen.displayMessage("Account Destination is not Available");
+                }
             }
         }
     }
-
 
     private double promptForTransferAmount() {
         Screen screen = getScreen();

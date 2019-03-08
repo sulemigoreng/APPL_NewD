@@ -9,8 +9,8 @@ public class Account {
     private double totalBalance; // funds available & pending deposits
     private boolean blocked;
     private boolean admin;
-    private int limitTransfer;
-    private int limitCash;
+    private double limitTransfer;
+    private double limitCash;
     private ArrayList<History> histories;
 
     // Account constructor initializes attributes
@@ -28,10 +28,9 @@ public class Account {
         this.histories = histories;
         this.admin = admin;
 
-        if (atatus.isEquals("SISWA")) {
-            limitTransfer = 0;
+        if (atatus.toUpperCase().equals("SISWA")) {
             limitCash = 20;
-        } else if (status.isEquals("MASA DEPAN")) {
+        } else if (status.toUpperCase().equals("MASA DEPAN")) {
             limitTransfer = 500;
             limitCash = 100;
         } else {
@@ -40,13 +39,23 @@ public class Account {
         }
     }
 
-    public void setLimitCash(int limitCash) {
+    public void setLimitCash(double limitCash) {
         this.limitCash = limitCash;
     }
 
-    public void setLimitTransfer(int limitTransfer) {
+    public void setLimitTransfer(double limitTransfer) {
         this.limitTransfer = limitTransfer;
     }
+
+    public double getLimitTransfer() {
+        return limitTransfer;
+    }
+
+    public double getLimitCash() {
+        return limitCash;
+    }
+    
+    
 
     // Account constructor initializes attributes
     // determines whether a user-specified PIN matches PIN in Account
