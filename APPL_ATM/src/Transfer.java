@@ -30,15 +30,20 @@ public class Transfer extends Transaction {
 
         this.userAccountDest = promptUserAccountDest();
         this.amount = promptForTransferAmount();
-
-        if (userAccountDest != null) {
-//            if(bankDatabase.getTotalBalance()<0){
-//            
-//            }
-            bankDatabase.transferToAccount(getAccountNumber(),
-                    userAccountDest.getAccountNumber(), amount);
-        }else if(userAccountDest.getAccountNumber()== getAccountNumber()){
+        double tempAvailableBalance = bankDatabase.getAvailableBalance(getAccountNumber())-amount;
+        if (userAccountDest.getAccountNumber() == getAccountNumber()) {
             screen.displayMessage("Account Destination is not Available");
+        } else {
+            if (userAccountDest != null) {
+                if (tempAvailableBalance < 0) {
+                    screen.displayMessage("Balance Insufficient");
+                } else {
+                    bankDatabase.transferToAccount(getAccountNumber(),
+                            userAccountDest.getAccountNumber(), amount);
+                }
+            } else {
+                screen.displayMessage("Account Destination is not Available");
+            }
         }
     }
 

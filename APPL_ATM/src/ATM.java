@@ -332,7 +332,7 @@ public class ATM {
                 break;
             case TRANSFER:
                 temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad);
-
+                break;
             case CHANGEPIN:
                 temp = new UbahPIN(currentAccountNumber, screen, bankDatabase, keypad);
                 break;
