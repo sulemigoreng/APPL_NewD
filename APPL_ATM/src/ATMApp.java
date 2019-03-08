@@ -5,5 +5,3 @@ public class ATMApp {
       theATM.run();
    }
 } 
-//pajo
-//ashiap
