@@ -28,17 +28,34 @@ public class Transfer extends Transaction {
     public void execute() {
         BankDatabase bankDatabase = getBankDatabase();
         Screen screen = getScreen();
+        Account account = getBankDatabase().getAccount(getAccountNumber());
 
         this.userAccountDest = promptUserAccountDest();
         this.amount = promptForTransferAmount();
+        double limitTransfer = account.getLimitTransfer();
 
-        if (userAccountDest != null) {
-            bankDatabase.transferToAccount(getAccountNumber(),
-                    userAccountDest.getAccountNumber(), amount);
-        }else if(userAccountDest.getAccountNumber()== getAccountNumber()){
-            screen.displayMessage("Account Destination is not Available");
-            if(userAccountDest.getStatus().toUpperCase().equals("MASA DEPAN")) {
-                bankDatabase.credit(getAccountNumber(), BIAYA_TRANSFER_MASADEPAN);
+        if (limitTransfer <= 0) {
+            System.out.println("Transfer limited");
+        } else {
+            if (!account.getStatus().toUpperCase().equals("SISWA")) {
+                if (limitTransfer <= amount) {
+                    System.out.println("Transfer limited");
+                } else {
+                    limitTransfer -= amount;
+                    if (userAccountDest != null) {
+                        bankDatabase.transferToAccount(getAccountNumber(),
+                                userAccountDest.getAccountNumber(), amount);
+                    } else if (userAccountDest.getAccountNumber() == getAccountNumber()) {
+                        screen.displayMessage("Account Destination is not Available");
+                    }
+                }
+            } else {
+                if (userAccountDest != null) {
+                    bankDatabase.transferToAccount(getAccountNumber(),
+                            userAccountDest.getAccountNumber(), amount);
+                } else if (userAccountDest.getAccountNumber() == getAccountNumber()) {
+                    screen.displayMessage("Account Destination is not Available");
+                }
             }
         }
     }

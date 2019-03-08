@@ -205,6 +205,7 @@ public class ATM {
                         break;
                     case ATUR_TANGGAL:
                         try {
+                            Account[] accounts = bankDatabase.getAccounts();
                             DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                             String tanggalBaru;
                             screen.displayMessageLine("Tanggal Sekarang: " + format.format(tanggal));
@@ -219,6 +220,15 @@ public class ATM {
                                     bankDatabase.credit(currentAccountNumber, BIAYAADMINISTRASIMASADEPAN);
                                 } else if (bankDatabase.getAccount(currentAccountNumber).getStatus().toUpperCase().equals("BISNIS")) {
                                     bankDatabase.credit(currentAccountNumber, BIAYAADMINISTRASIBISNIS);
+                            for (Account account : accounts) {
+                                if (account.getStatus().toUpperCase().equals("SISWA")) {
+                                    account.setLimitCash(20);
+                                } else if (account.getStatus().toUpperCase().equals("MASA DEPAN")) {
+                                    account.setLimitCash(100);
+                                    account.setLimitTransfer(500);
+                                } else {
+                                    account.setLimitCash(1000);
+                                    account.setLimitTransfer(10000);
                                 }
                             }
                         } catch (ParseException ex) {

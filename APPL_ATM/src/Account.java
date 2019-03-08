@@ -11,6 +11,9 @@ public class Account {
     private String status;
 //    private boolean admin;
     
+    private boolean admin;
+    private double limitTransfer;
+    private double limitCash;
     private ArrayList<History> histories;
 
     // Account constructor initializes attributes
@@ -28,6 +31,17 @@ public class Account {
 //        }
         this.status = status.toString();
         this.histories = histories;
+        this.admin = admin;
+
+        if (atatus.toUpperCase().equals("SISWA")) {
+            limitCash = 20;
+        } else if (status.toUpperCase().equals("MASA DEPAN")) {
+            limitTransfer = 500;
+            limitCash = 100;
+        } else {
+            limitTransfer = 10000;
+            limitCash = 1000;
+        }
 //        this.admin = admin;
     }
 
@@ -41,6 +55,24 @@ public class Account {
         this.blocked = blocked;
         this.status = status.toString();
     }
+
+    public void setLimitCash(double limitCash) {
+        this.limitCash = limitCash;
+    }
+
+    public void setLimitTransfer(double limitTransfer) {
+        this.limitTransfer = limitTransfer;
+    }
+
+    public double getLimitTransfer() {
+        return limitTransfer;
+    }
+
+    public double getLimitCash() {
+        return limitCash;
+    }
+    
+    
 
     // Account constructor initializes attributes
     // determines whether a user-specified PIN matches PIN in Account
