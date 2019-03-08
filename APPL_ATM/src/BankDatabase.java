@@ -5,12 +5,19 @@ public class BankDatabase {
 
     private Account[] accounts; // array of Accounts
 
+    public enum Jenis {
+        Siswa,
+        Bisnis,
+        Masa_Depan,
+        Admin
+    }
+
     public BankDatabase() {
         accounts = new Account[4]; // just 2 accounts for testing
-        accounts[0] = new Account(12345, 54321, 1000.0, 1200.0, false, false, new ArrayList<History>());
-        accounts[1] = new Account(8765, 5678, 200.0, 200.0, false, false, new ArrayList<History>());
-        accounts[2] = new Account(0, 0, 0, 0, false, true, new ArrayList<History>());
-        accounts[3] = new Account(1, 1, 1, 1, false, false, new ArrayList<History>());
+        accounts[0] = new Account(12345, 54321, 1000.0, 1200.0, false, Jenis.Bisnis);
+        accounts[1] = new Account(8765, 5678, 200.0, 200.0, false, Jenis.Masa_Depan);
+        accounts[2] = new Account(0, 0, 0, 0, true, Jenis.Siswa);
+        accounts[3] = new Account(1, 1, 1, 1, false, Jenis.Admin, new ArrayList<History>());
     }
 
     public Account[] getAccounts() {
@@ -38,14 +45,14 @@ public class BankDatabase {
         }
     }
 
-    public boolean isAdmin(int accountNumber) {
-        for (Account x : this.accounts) {
-            if (x.getAccountNumber() == accountNumber) {
-                return x.getAdmin();
-            }
-        }
-        return false; // if no matching account was found, return null
-    }
+//    public boolean isAdmin(int accountNumber) {
+//        for (Account x : this.accounts) {
+//            if (x.getAccountNumber() == accountNumber) {
+//                return x.getStatus();
+//            }
+//        }
+//        return false; // if no matching account was found, return null
+//    }
 
     public Account checkAccountDest(int userAccountNumberDest) {
         for (Account x : this.accounts) {
@@ -98,7 +105,6 @@ public class BankDatabase {
         return false; // if no matching account was found, return null
     }
 
-
     public Account getAccountUser(int accountNumber) {
         for (Account x : this.accounts) {
             if (x.getAccountNumber() == accountNumber) {
@@ -107,16 +113,17 @@ public class BankDatabase {
         }
         return null; // if no matching account was found, return null
     }
+
     public void unblock(int userAccountNumber) {
         getAccount(userAccountNumber).setBlocked(false);
     }
 
-    public void addAccount(int userAccountNumber, int userAccountPIN) {
+    public void addAccount(int userAccountNumber, int userAccountPIN, BankDatabase.Jenis status) {
         boolean stop = false;
         int i = 0;
         while (!stop) {
             if (accounts[i].equals(null)) {
-                accounts[i] = new Account(userAccountNumber, userAccountPIN, 0, 0, false,false, new ArrayList<History>());
+                accounts[i] = new Account(userAccountNumber, userAccountPIN, 0, 0, false, status, new ArrayList<History>());
                 stop = true;
             }
         }

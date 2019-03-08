@@ -16,6 +16,7 @@ public class Transfer extends Transaction {
     private double amount;
     private Keypad keypad;
     private final static int CANCELED = 0;
+    private final static double BIAYA_TRANSFER_MASADEPAN = 5.0;
 
     public Transfer(int userAccountNumberSource, Screen atmScreen,
             BankDatabase atmBankDatabase, Keypad atmKeypad) {
@@ -34,6 +35,9 @@ public class Transfer extends Transaction {
         if (userAccountDest != null) {
             bankDatabase.transferToAccount(getAccountNumber(),
                     userAccountDest.getAccountNumber(), amount);
+            if(userAccountDest.getStatus().toUpperCase().equals("MASA DEPAN")) {
+                bankDatabase.credit(getAccountNumber(), BIAYA_TRANSFER_MASADEPAN);
+            }
         }
     }
 

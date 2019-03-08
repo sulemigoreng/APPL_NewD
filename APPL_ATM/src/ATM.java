@@ -1,9 +1,8 @@
 
 import java.util.ArrayList;
 
-
 public class ATM {
-    
+
     private boolean userAuthenticated; // whether user is authenticated
     private int currentAccountNumber; // current user's account number
     private Screen screen; // ATM's screen
@@ -11,7 +10,7 @@ public class ATM {
     private CashDispenser cashDispenser; // ATM's cash dispenser
     private BankDatabase bankDatabase; // account information database
     private DepositSlot ATMDepositSlot;
-    private boolean admin;
+    private String jenis;
     private Account acc;
 
     // constants corresponding to main menu options
@@ -36,7 +35,7 @@ public class ATM {
         cashDispenser = new CashDispenser(screen); // create cash dispenser
         bankDatabase = new BankDatabase(); // create acct info database
         ATMDepositSlot = new DepositSlot();
-        admin = false;
+        jenis = "";
     }
 
     // start ATM 
@@ -101,7 +100,7 @@ public class ATM {
             // check whether authentication succeeded
             if (userAuthenticated) {
                 currentAccountNumber = accountNumber; // save user's account #
-                admin = bankDatabase.isAdmin(accountNumber);
+                jenis = bankDatabase.getAccount(accountNumber).getStatus();
             } else if (acc == null) {
                 screen.displayMessageLine(
                         "Invalid account number or PIN. Please try again.");
@@ -142,7 +141,20 @@ public class ATM {
 
         screen.displayMessage("\nPlease Insert New Account PIN: ");
         int newAccountPIN = keypad.getInput();
-        bankDatabase.addAccount(newAccountNumber, newAccountPIN);
+        screen.displayMessageLine("\nType Account:");
+        screen.displayMessageLine("1 - Siswa");
+        screen.displayMessageLine("2 - Masa Depan");
+        screen.displayMessageLine("3 - Bisnis");
+        screen.displayMessage("\nPlease Insert Account Type PIN: ");
+         
+        BankDatabase.Jenis typeAcc = null;
+        switch(keypad.getInput()) {
+            case 1: typeAcc = BankDatabase.Jenis.Siswa;break;
+            case 2: typeAcc = BankDatabase.Jenis.Masa_Depan;break;
+            case 3: typeAcc = BankDatabase.Jenis.Bisnis;break;
+        }
+
+        bankDatabase.addAccount(newAccountNumber, newAccountPIN, typeAcc);
 
     }
 
@@ -150,14 +162,14 @@ public class ATM {
     private void performTransactions() {
         // local variable to store transaction currently being processed
         Transaction currentTransaction = null;
-        
+
         boolean userExited = false; // user has not chosen to exit
 
         // loop while user has not chosen option to exit system
         while (!userExited) {
             // show main menu and get user selection
             int mainMenuSelection = displayMainMenu();
-            if (admin) {
+            if (jenis.toUpperCase().equals("ADMIN")) {
                 // decide how to proceed based on user's menu selection
                 switch (mainMenuSelection) {
                     case 5:
@@ -208,7 +220,7 @@ public class ATM {
                         currentTransaction
                                 = createTransaction(mainMenuSelection);
                         currentTransaction.execute();
-                        
+
                         break;
                     case DEPOSIT:
                         currentTransaction
@@ -272,7 +284,16 @@ public class ATM {
 
     // display the main menu and return an input selection
     private int displayMainMenu() {
-        if (!admin) {
+        if (jenis.toUpperCase().equals("ADMIN")) {
+            screen.displayMessageLine("\nMain menu:");
+            screen.displayMessageLine("1 - Unblock Nasabah");
+            screen.displayMessageLine("2 - Tambah Nasabah");
+            screen.displayMessageLine("3 - Lihat Uang Dispenser");
+            screen.displayMessageLine("4 - Tambah Uang Dispenser");
+            screen.displayMessageLine("5 - Validasi Deposit");
+            screen.displayMessageLine("6 - Exit\n");
+            screen.displayMessage("Enter a choice: ");
+        } else {
             screen.displayMessageLine("\nMain menu:");
             screen.displayMessageLine("1 - View my balance");
             screen.displayMessageLine("2 - Withdraw cash");
@@ -283,19 +304,10 @@ public class ATM {
             screen.displayMessageLine("7 - Exit\n");
 
             screen.displayMessage("Enter a choice: ");
-        } else {
-            screen.displayMessageLine("\nMain menu:");
-            screen.displayMessageLine("1 - Unblock Nasabah");
-            screen.displayMessageLine("2 - Tambah Nasabah");
-            screen.displayMessageLine("3 - Lihat Uang Dispenser");
-            screen.displayMessageLine("4 - Tambah Uang Dispenser");
-            screen.displayMessageLine("5 - Validasi Deposit");
-            screen.displayMessageLine("6 - Exit\n");
-            screen.displayMessage("Enter a choice: ");
         }
         return keypad.getInput(); // return user's selection
     }
-    
+
     private Transaction createTransaction(int type) {
         Transaction temp = null;
         switch (type) {
@@ -315,7 +327,7 @@ public class ATM {
                 temp = new UbahPIN(currentAccountNumber, screen, bankDatabase, keypad);
                 break;
         }
-        
+
         return temp;
     }
 }

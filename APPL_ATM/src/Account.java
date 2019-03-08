@@ -8,23 +8,38 @@ public class Account {
     private double availableBalance; // funds available for withdrawal
     private double totalBalance; // funds available & pending deposits
     private boolean blocked;
-    private boolean admin;
+    private String status;
+//    private boolean admin;
+    
     private ArrayList<History> histories;
 
     // Account constructor initializes attributes
     public Account(int theAccountNumber, int thePIN,
-            double theAvailableBalance, double theTotalBalance, boolean blocked, boolean admin, ArrayList<History> histories) {
+            double theAvailableBalance, double theTotalBalance, 
+            boolean blocked, BankDatabase.Jenis status, ArrayList<History> histories) {
         accountNumber = theAccountNumber;
         pin = thePIN;
         availableBalance = theAvailableBalance;
         totalBalance = theTotalBalance;
-        if (admin) {
-            blocked = false;
-        } else {
-            blocked = true;
-        }
+//        if (admin) {
+//            blocked = false;
+//        } else {
+//            blocked = true;
+//        }
+        this.status = status.toString();
         this.histories = histories;
-        this.admin = admin;
+//        this.admin = admin;
+    }
+
+    Account(int theAccountNumber, int thePIN,
+            double theAvailableBalance, double theTotalBalance, 
+            boolean blocked, BankDatabase.Jenis status) {
+        accountNumber = theAccountNumber;
+        pin = thePIN;
+        availableBalance = theAvailableBalance;
+        totalBalance = theTotalBalance;
+        this.blocked = blocked;
+        this.status = status.toString();
     }
 
     // Account constructor initializes attributes
@@ -78,11 +93,6 @@ public class Account {
 
     public int getAccountNumber() {
         return accountNumber;
-
-    }
-
-    public boolean getAdmin() {
-        return admin;
     }
 
     public ArrayList<History> getHistories() {
@@ -103,6 +113,13 @@ public class Account {
 
     public void setPin(int pin) {
         this.pin = pin;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
     }
 
 }
