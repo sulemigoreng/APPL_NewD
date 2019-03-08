@@ -182,53 +182,13 @@ public class ATM {
                 temp = new Withdrawal(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser);
                 break;
             case DEPOSIT:
-                currentTransaction = 
-                  createTransaction(mainMenuSelection);
-               
-               currentTransaction.execute();
-            break;
-            case EXIT: // user chose to terminate session
-               screen.displayMessageLine("\nExiting the system...");
-               userExited = true; // this ATM session should end
-               break;
-            default: // 
-               screen.displayMessageLine(
-                  "\nYou did not enter a valid selection. Try again.");
-               break;
-         }
-      } 
-   } 
-
-   // display the main menu and return an input selection
-   private int displayMainMenu() {
-      screen.displayMessageLine("\nMain menu:");
-      screen.displayMessageLine("1 - View my balance");
-      screen.displayMessageLine("2 - Withdraw cash");
-      screen.displayMessageLine("3 - Deposit funds");
-      screen.displayMessageLine("4 - Exit\n");
-      screen.displayMessage("Enter a choice: ");
-      return keypad.getInput(); // return user's selection
-   } 
-         
-   private Transaction createTransaction(int type) {
-      Transaction temp = null; 
-          
-      switch (type) {
-         case BALANCE_INQUIRY: 
-            temp = new BalanceInquiry(
-               currentAccountNumber, screen, bankDatabase);
-         break;
-         case WITHDRAWAL:
-             temp = new Withdrawal(currentAccountNumber,screen,bankDatabase,keypad,cashDispenser);
-         break;
-         case DEPOSIT:
-             temp = new Deposit(currentAccountNumber, screen, bankDatabase, keypad, ATMDepositSlot);
-         break;
-      }
-
-      return temp;
-   } 
-} //Komen si Azra
-//testcommit -zikri
-
-//Comment Mumuh
+                temp = new Deposit(currentAccountNumber, screen, bankDatabase, keypad, ATMDepositSlot);
+                break;
+            case TRANSFER:
+                temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad);
+                break;
+        }
+        
+        return temp;
+    }
+}
