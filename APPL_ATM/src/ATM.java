@@ -34,10 +34,9 @@ public class ATM {
     private static final int DISPLAY_DISPENSER = 3;
     private static final int ADD_DISPENSER = 4;
     private static final int ATUR_TANGGAL = 6;
-    
+
     private static final double BIAYAADMINISTRASIMASADEPAN = 1.0;
     private static final double BIAYAADMINISTRASIBISNIS = 5.0;
-    
 
     // no-argument ATM constructor initializes instance variables
     public ATM() {
@@ -220,15 +219,17 @@ public class ATM {
                                     bankDatabase.credit(currentAccountNumber, BIAYAADMINISTRASIMASADEPAN);
                                 } else if (bankDatabase.getAccount(currentAccountNumber).getStatus().toUpperCase().equals("BISNIS")) {
                                     bankDatabase.credit(currentAccountNumber, BIAYAADMINISTRASIBISNIS);
-                            for (Account account : accounts) {
-                                if (account.getStatus().toUpperCase().equals("SISWA")) {
-                                    account.setLimitCash(20);
-                                } else if (account.getStatus().toUpperCase().equals("MASA DEPAN")) {
-                                    account.setLimitCash(100);
-                                    account.setLimitTransfer(500);
-                                } else {
-                                    account.setLimitCash(1000);
-                                    account.setLimitTransfer(10000);
+                                    for (Account account : accounts) {
+                                        if (account.getStatus().toUpperCase().equals("SISWA")) {
+                                            account.setLimitCash(20);
+                                        } else if (account.getStatus().toUpperCase().equals("MASA DEPAN")) {
+                                            account.setLimitCash(100);
+                                            account.setLimitTransfer(500);
+                                        } else {
+                                            account.setLimitCash(1000);
+                                            account.setLimitTransfer(10000);
+                                        }
+                                    }
                                 }
                             }
                         } catch (ParseException ex) {
@@ -236,6 +237,7 @@ public class ATM {
                         }
 
                         break;
+
                     case DISPLAY_DISPENSER:
                         cashDispenser.displayDispenser();
                         break;

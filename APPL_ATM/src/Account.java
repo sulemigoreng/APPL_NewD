@@ -33,9 +33,9 @@ public class Account {
         this.histories = histories;
         this.admin = admin;
 
-        if (atatus.toUpperCase().equals("SISWA")) {
+        if (this.status.toUpperCase().equals("SISWA")) {
             limitCash = 20;
-        } else if (status.toUpperCase().equals("MASA DEPAN")) {
+        } else if (this.status.toUpperCase().equals("MASA DEPAN")) {
             limitTransfer = 500;
             limitCash = 100;
         } else {
