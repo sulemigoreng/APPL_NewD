@@ -1,3 +1,6 @@
+
+import java.util.Date;
+
 public class Screen {
    // display a message without a carriage return
    public void displayMessage(String message) {
@@ -13,4 +16,8 @@ public class Screen {
    public void displayDollarAmount(double amount) {
       System.out.printf("$%,.2f", amount);   
    }
+
+    void displayMessage(Date tanggal) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 } 

@@ -32,8 +32,13 @@ public class Transfer extends Transaction {
         this.amount = promptForTransferAmount();
 
         if (userAccountDest != null) {
+//            if(bankDatabase.getTotalBalance()<0){
+//            
+//            }
             bankDatabase.transferToAccount(getAccountNumber(),
                     userAccountDest.getAccountNumber(), amount);
+        }else if(userAccountDest.getAccountNumber()== getAccountNumber()){
+            screen.displayMessage("Account Destination is not Available");
         }
     }
 

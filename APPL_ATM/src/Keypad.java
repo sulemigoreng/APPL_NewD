@@ -1,3 +1,4 @@
+import java.util.Date;
 import java.util.Scanner;
 
 public class Keypad {
@@ -9,5 +10,9 @@ public class Keypad {
 
    public int getInput() {
       return input.nextInt(); // user enters an integer
-   } 
-} 
+   }
+   
+   public String getDateInput(){
+      return input.nextLine();
+    }
+}
