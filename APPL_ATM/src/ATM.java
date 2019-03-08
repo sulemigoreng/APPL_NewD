@@ -145,4 +145,3 @@ public class ATM {
 //testcommit -zikri
 
 //Comment Mumuh
-//ini anggita
