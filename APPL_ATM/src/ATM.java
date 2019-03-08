@@ -295,9 +295,13 @@ public class ATM {
                         currentTransaction.execute();
                         break;
                     case TRANSFER:
-                        currentTransaction
-                                = createTransaction(mainMenuSelection);
-                        currentTransaction.execute();
+                        if (!bankDatabase.getAccount(currentAccountNumber).getStatus().toUpperCase().equals("SISWA")) {
+                            currentTransaction
+                                    = createTransaction(mainMenuSelection);
+                            currentTransaction.execute();
+                        } else {
+                            screen.displayMessageLine("Sorry, you can not use this menu. Please, choose the other one.");
+                        }
                         break;
                     case EXIT: // user chose to terminate session
                         screen.displayMessageLine("\nExiting the system...");
