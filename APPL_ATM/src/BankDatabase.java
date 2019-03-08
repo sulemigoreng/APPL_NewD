@@ -3,29 +3,32 @@ import java.util.ArrayList;
 
 public class BankDatabase {
 
-   private Account[] accounts; // array of Accounts
-   
-   public BankDatabase() {
-      accounts = new Account[10]; // just 2 accounts for testing
-      accounts[0] = new Account(12345, 54321, 1000.0, 1200.0,false);
-      accounts[1] = new Account(8765, 5678, 200.0, 200.0,false);
-      accounts[2] = new Account(0, 0, 0, 0,true); 
-      accounts[3] = new Account(1, 1, 1, 1, false, false, new ArrayList<History>());
-   }
-   
-   private Account getAccount(int accountNumber) {
-      for(Account x : this.accounts){
-          if(x.getAccountNumber()==accountNumber){
-              return x;
-          }
-      }
-      return null; // if no matching account was found, return null
-   } 
+    private Account[] accounts; // array of Accounts
+
+    public BankDatabase() {
+        accounts = new Account[4]; // just 2 accounts for testing
+        accounts[0] = new Account(12345, 54321, 1000.0, 1200.0, false, false, new ArrayList<History>());
+        accounts[1] = new Account(8765, 5678, 200.0, 200.0, false, false, new ArrayList<History>());
+        accounts[2] = new Account(0, 0, 0, 0, false, true, new ArrayList<History>());
+        accounts[3] = new Account(1, 1, 1, 1, false, false, new ArrayList<History>());
+    }
+
+    public Account[] getAccounts() {
+        return accounts;
+    }
+
+    public Account getAccount(int accountNumber) {
+        for (Account x : this.accounts) {
+            if (x.getAccountNumber() == accountNumber) {
+                return x;
+            }
+        }
+        return null; // if no matching account was found, return null
+    }
 
     public boolean authenticateUser(int userAccountNumber, int userPIN) {
         // attempt to retrieve the account with the account number
         Account userAccount = getAccount(userAccountNumber);
-
 
         // if account exists, return result of Account method validatePIN
         if (userAccount != null) {
@@ -70,17 +73,52 @@ public class BankDatabase {
         getAccount(userAccountNumber).credit(amount);
     }
 
-    public void debit(int userAccountNumber, double amount) {
-        getAccount(userAccountNumber).debit(amount);
+    public void validate(int userAccountNumber, double amount) {
+        getAccount(userAccountNumber).validated(amount);
     }
-    
+
+    public void debit(int userAccountNumber, double amount, Deposit x) {
+        getAccount(userAccountNumber).debit(amount, x);
+    }
+
     public void transfer(int userAccountNumber, double amount) {
         getAccount(userAccountNumber).transfer(amount);
     }
-    public ArrayList<History> getHistories(int userAccountNumber){
-       return getAccount(userAccountNumber).getHistories();
-   }
-}
 
-   
-   
+    public ArrayList<History> getHistories(int userAccountNumber) {
+        return getAccount(userAccountNumber).getHistories();
+    }
+
+    public boolean isExists(int accountNumber) {
+        for (Account x : this.accounts) {
+            if (x.getAccountNumber() == accountNumber) {
+                return true;
+            }
+        }
+        return false; // if no matching account was found, return null
+    }
+
+
+    public Account getAccountUser(int accountNumber) {
+        for (Account x : this.accounts) {
+            if (x.getAccountNumber() == accountNumber) {
+                return x;
+            }
+        }
+        return null; // if no matching account was found, return null
+    }
+    public void unblock(int userAccountNumber) {
+        getAccount(userAccountNumber).setBlocked(false);
+    }
+
+    public void addAccount(int userAccountNumber, int userAccountPIN) {
+        boolean stop = false;
+        int i = 0;
+        while (!stop) {
+            if (accounts[i].equals(null)) {
+                accounts[i] = new Account(userAccountNumber, userAccountPIN, 0, 0, false,false, new ArrayList<History>());
+                stop = true;
+            }
+        }
+    }
+}

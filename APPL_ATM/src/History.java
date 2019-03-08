@@ -9,16 +9,17 @@
  * @author Regawa
  */
 public class History {
+
     private String keterangan;
     private double amount;
-    private boolean sDeposit;
+    private Deposit sDeposit;
 
-    public History(String keterangan, double amount, boolean sDeposit) {
+    public History(String keterangan, double amount, Deposit sDeposit) {
         this.keterangan = keterangan;
         this.amount = amount;
         this.sDeposit = sDeposit;
     }
-    
+
     public History(String keterangan, double amount) {
         this.keterangan = keterangan;
         this.amount = amount;
@@ -31,15 +32,14 @@ public class History {
     public String getKeterangan() {
         return keterangan;
     }
+//
 
-    public boolean issDeposit() {
+    public Deposit getDeposit() {
         return sDeposit;
     }
+//
+//    public void setsDeposit(boolean sDeposit) {
+//        this.sDeposit = sDeposit;
+//    }
 
-    public void setsDeposit(boolean sDeposit) {
-        this.sDeposit = sDeposit;
-    }
-    
-    
-    
 }
