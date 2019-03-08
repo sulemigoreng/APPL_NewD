@@ -1,5 +1,11 @@
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ATM {
 
@@ -12,6 +18,7 @@ public class ATM {
     private DepositSlot ATMDepositSlot;
     private String jenis;
     private Account acc;
+    private Date tanggal;
 
     // constants corresponding to main menu options
     private static final int BALANCE_INQUIRY = 1;
@@ -21,10 +28,16 @@ public class ATM {
     private static final int TRANSFER = 5;
     private static final int EXIT = 7;
 
+    private static final int TANGGALADMINISTRASI = 3;
     private static final int HISTORY = 6;
     private static final int CHANGEPIN = 4;
     private static final int DISPLAY_DISPENSER = 3;
     private static final int ADD_DISPENSER = 4;
+    private static final int ATUR_TANGGAL = 6;
+    
+    private static final double BIAYAADMINISTRASIMASADEPAN = 1.0;
+    private static final double BIAYAADMINISTRASIBISNIS = 5.0;
+    
 
     // no-argument ATM constructor initializes instance variables
     public ATM() {
@@ -35,7 +48,7 @@ public class ATM {
         cashDispenser = new CashDispenser(screen); // create cash dispenser
         bankDatabase = new BankDatabase(); // create acct info database
         ATMDepositSlot = new DepositSlot();
-        jenis = "";
+        tanggal = new Date();
     }
 
     // start ATM 
@@ -146,12 +159,18 @@ public class ATM {
         screen.displayMessageLine("2 - Masa Depan");
         screen.displayMessageLine("3 - Bisnis");
         screen.displayMessage("\nPlease Insert Account Type PIN: ");
-         
+
         BankDatabase.Jenis typeAcc = null;
-        switch(keypad.getInput()) {
-            case 1: typeAcc = BankDatabase.Jenis.Siswa;break;
-            case 2: typeAcc = BankDatabase.Jenis.Masa_Depan;break;
-            case 3: typeAcc = BankDatabase.Jenis.Bisnis;break;
+        switch (keypad.getInput()) {
+            case 1:
+                typeAcc = BankDatabase.Jenis.Siswa;
+                break;
+            case 2:
+                typeAcc = BankDatabase.Jenis.Masa_Depan;
+                break;
+            case 3:
+                typeAcc = BankDatabase.Jenis.Bisnis;
+                break;
         }
 
         bankDatabase.addAccount(newAccountNumber, newAccountPIN, typeAcc);
@@ -184,9 +203,28 @@ public class ATM {
                         // initialize as new object of chosen type
                         addUser();
                         break;
-                    case 6: // user chose to terminate session
-                        screen.displayMessageLine("\nExiting the system...");
-                        userExited = true; // this ATM session should end
+                    case ATUR_TANGGAL:
+                        try {
+                            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                            String tanggalBaru;
+                            screen.displayMessageLine("Tanggal Sekarang: " + format.format(tanggal));
+                            screen.displayMessage("Masukan Tanggal Baru(mm/DD/"
+                                    + "yyyy): ");
+                            keypad.getDateInput();//makan Enter
+                            tanggalBaru = keypad.getDateInput();
+                            tanggal = format.parse(tanggalBaru);
+
+                            if (TANGGALADMINISTRASI == tanggal.getDay()) {
+                                if (bankDatabase.getAccount(currentAccountNumber).getStatus().toUpperCase().equals("MASA DEPAN")) {
+                                    bankDatabase.credit(currentAccountNumber, BIAYAADMINISTRASIMASADEPAN);
+                                } else if (bankDatabase.getAccount(currentAccountNumber).getStatus().toUpperCase().equals("BISNIS")) {
+                                    bankDatabase.credit(currentAccountNumber, BIAYAADMINISTRASIBISNIS);
+                                }
+                            }
+                        } catch (ParseException ex) {
+                            Logger.getLogger(ATM.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
                         break;
                     case DISPLAY_DISPENSER:
                         cashDispenser.displayDispenser();
@@ -291,7 +329,8 @@ public class ATM {
             screen.displayMessageLine("3 - Lihat Uang Dispenser");
             screen.displayMessageLine("4 - Tambah Uang Dispenser");
             screen.displayMessageLine("5 - Validasi Deposit");
-            screen.displayMessageLine("6 - Exit\n");
+            screen.displayMessageLine("6 - Atur Tanggal");
+            screen.displayMessageLine("7 - Exit\n");
             screen.displayMessage("Enter a choice: ");
         } else {
             screen.displayMessageLine("\nMain menu:");

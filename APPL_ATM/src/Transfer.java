@@ -35,6 +35,8 @@ public class Transfer extends Transaction {
         if (userAccountDest != null) {
             bankDatabase.transferToAccount(getAccountNumber(),
                     userAccountDest.getAccountNumber(), amount);
+        }else if(userAccountDest.getAccountNumber()== getAccountNumber()){
+            screen.displayMessage("Account Destination is not Available");
             if(userAccountDest.getStatus().toUpperCase().equals("MASA DEPAN")) {
                 bankDatabase.credit(getAccountNumber(), BIAYA_TRANSFER_MASADEPAN);
             }
