@@ -14,10 +14,10 @@ public class BankDatabase {
 
     public BankDatabase() {
         accounts = new Account[4]; // just 2 accounts for testing
-        accounts[0] = new Account(12345, 54321, 1000.0, 1200.0, false, Jenis.Bisnis);
-        accounts[1] = new Account(8765, 5678, 200.0, 200.0, false, Jenis.Masa_Depan);
-        accounts[2] = new Account(0, 0, 0, 0, true, Jenis.Siswa);
-        accounts[3] = new Account(1, 1, 1, 1, false, Jenis.Admin, new ArrayList<History>());
+        accounts[0] = new Account(12345, 54321, 1000.0, 1200.0, false, Jenis.Siswa, new ArrayList<History>());
+        accounts[1] = new Account(8765, 5678, 200.0, 200.0, false, Jenis.Masa_Depan, new ArrayList<History>());
+        accounts[2] = new Account(0, 0, 0, 0, true, Jenis.Siswa, new ArrayList<History>());
+        accounts[3] = new Account(1, 1, 1, 1, false, Jenis.Admin);
     }
 
     public Account[] getAccounts() {
