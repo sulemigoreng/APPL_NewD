@@ -9,6 +9,8 @@ public class Account {
     private double totalBalance; // funds available & pending deposits
     private boolean blocked;
     private boolean admin;
+    private int limitTransfer;
+    private int limitCash;
     private ArrayList<History> histories;
 
     // Account constructor initializes attributes
@@ -25,6 +27,25 @@ public class Account {
         }
         this.histories = histories;
         this.admin = admin;
+
+        if (atatus.isEquals("SISWA")) {
+            limitTransfer = 0;
+            limitCash = 20;
+        } else if (status.isEquals("MASA DEPAN")) {
+            limitTransfer = 500;
+            limitCash = 100;
+        } else {
+            limitTransfer = 10000;
+            limitCash = 1000;
+        }
+    }
+
+    public void setLimitCash(int limitCash) {
+        this.limitCash = limitCash;
+    }
+
+    public void setLimitTransfer(int limitTransfer) {
+        this.limitTransfer = limitTransfer;
     }
 
     // Account constructor initializes attributes

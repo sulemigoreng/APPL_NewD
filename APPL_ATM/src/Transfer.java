@@ -31,11 +31,23 @@ public class Transfer extends Transaction {
         this.userAccountDest = promptUserAccountDest();
         this.amount = promptForTransferAmount();
 
-        if (userAccountDest != null) {
-            bankDatabase.transferToAccount(getAccountNumber(),
-                    userAccountDest.getAccountNumber(), amount);
+        bankDatabase.getStatus();
+
+        if (limitTransfer <= 0) {
+            System.out.println("Transfer limited");
+        } else {
+            if (limitTransfer <= amount) {
+                System.out.println("Transfer limited");
+            } else {
+                limitTransfer -= amount;
+            }
+            if (userAccountDest != null) {
+                bankDatabase.transferToAccount(getAccountNumber(),
+                        userAccountDest.getAccountNumber(), amount);
+            }
         }
     }
+
 
     private double promptForTransferAmount() {
         Screen screen = getScreen();

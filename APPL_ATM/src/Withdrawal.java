@@ -23,30 +23,42 @@ public class Withdrawal extends Transaction {
    // perform transaction
    @Override
    public void execute() {
-       // get references to bank database and screen
-      BankDatabase bankDatabase = getBankDatabase();
-      Screen screen = getScreen(); // get screen reference
+        // get references to bank database and screen
+        BankDatabase bankDatabase = getBankDatabase();
+        Screen screen = getScreen(); // get screen reference
 
-      // get the total balance for the account involved
-      double totalBalance = 
-         bankDatabase.getTotalBalance(getAccountNumber());
-      amount = displayMenuOfAmounts();
-      if(amount == 6){
-          screen.displayMessageLine("Canceling Transaction...");
-      }else{
-      if(cashDispenser.isSufficientCashAvailable(amount)){
-          if(totalBalance>200){
-          cashDispenser.dispenseCash(amount);
-          bankDatabase.credit(super.getAccountNumber(),amount);
-          screen.displayMessageLine("Your cash has been dispensed. Please take your cash now.");
-          }else{
-              screen.displayMessageLine("Your balance is not sufficient");
-          }
-      }else{
-          screen.displayMessageLine("Cash is not available at the moment");
-      }
-      }
-   } 
+        // get the total balance for the account involved
+        double totalBalance
+                = bankDatabase.getTotalBalance(getAccountNumber());
+        amount = displayMenuOfAmounts();
+
+        bankDatabase.getStatus();
+        
+        if (amount == 6) {
+            screen.displayMessageLine("Canceling Transaction...");
+        } else {
+            if (limitCash <= 0) {
+                System.out.println("Cash limited");
+            } else {
+                if (limitCash <= amount) {
+                    System.out.println("Cash limited");
+                } else {
+                    limitCash -= amount;
+                }
+                if (cashDispenser.isSufficientCashAvailable(amount)) {
+                    if (totalBalance > 200) {
+                        cashDispenser.dispenseCash(amount);
+                        bankDatabase.credit(super.getAccountNumber(), amount);
+                        screen.displayMessageLine("Your cash has been dispensed. Please take your cash now.");
+                    } else {
+                        screen.displayMessageLine("Your balance is not sufficient");
+                    }
+                } else {
+                    screen.displayMessageLine("Cash is not available at the moment");
+                }
+            }
+        }
+    }
 
    // display a menu of withdrawal amounts and the option to cancel;
    // return the chosen amount or 0 if the user chooses to cancel
