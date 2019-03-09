@@ -34,7 +34,7 @@ public class Transfer extends Transaction {
         this.amount = promptForTransferAmount();
         double limitTransfer = account.getLimitTransfer();
 
-        if (limitTransfer <= 0) {
+        if (limitTransfer <= 0 && !account.getStatus().toUpperCase().equals("SISWA")) {
             System.out.println("Transfer limited");
         } else {
             if (!account.getStatus().toUpperCase().equals("SISWA")) {

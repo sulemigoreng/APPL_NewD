@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Account {
 
@@ -10,7 +11,7 @@ public class Account {
     private boolean blocked;
     private String status;
 //    private boolean admin;
-    
+
     private boolean admin;
     private double limitTransfer;
     private double limitCash;
@@ -18,17 +19,13 @@ public class Account {
 
     // Account constructor initializes attributes
     public Account(int theAccountNumber, int thePIN,
-            double theAvailableBalance, double theTotalBalance, 
+            double theAvailableBalance, double theTotalBalance,
             boolean blocked, BankDatabase.Jenis status, ArrayList<History> histories) {
         accountNumber = theAccountNumber;
         pin = thePIN;
         availableBalance = theAvailableBalance;
         totalBalance = theTotalBalance;
-//        if (admin) {
-//            blocked = false;
-//        } else {
-//            blocked = true;
-//        }
+        this.blocked = blocked;
         this.status = status.toString();
         this.histories = histories;
         this.admin = admin;
@@ -46,7 +43,7 @@ public class Account {
     }
 
     Account(int theAccountNumber, int thePIN,
-            double theAvailableBalance, double theTotalBalance, 
+            double theAvailableBalance, double theTotalBalance,
             boolean blocked, BankDatabase.Jenis status) {
         accountNumber = theAccountNumber;
         pin = thePIN;
@@ -71,8 +68,6 @@ public class Account {
     public double getLimitCash() {
         return limitCash;
     }
-    
-    
 
     // Account constructor initializes attributes
     // determines whether a user-specified PIN matches PIN in Account
@@ -121,6 +116,7 @@ public class Account {
     public void transfer(double amount) {
         availableBalance += amount;
         totalBalance += amount;
+        addHistory(3, amount, null);
     }
 
     public int getAccountNumber() {
@@ -132,13 +128,17 @@ public class Account {
     }
 
     public void addHistory(int transaction, double amount, Deposit x) {
+        Date today= ATM.tanggal;
         String keterangan = null;
         if (transaction == 1) {
             keterangan = "Withdrawal";
-            this.histories.add(new History(keterangan, amount));
+            this.histories.add(new History(keterangan, amount, today));
         } else if (transaction == 2) {
             keterangan = "Deposit";
-            this.histories.add(new History(keterangan, amount, x));
+            this.histories.add(new History(keterangan, amount, x, today));
+        } else if (transaction == 3) {
+            keterangan = "Transfer";
+            this.histories.add(new History(keterangan, amount, today));
         }
 
     }

@@ -18,7 +18,7 @@ public class ATM {
     private DepositSlot ATMDepositSlot;
     private String jenis;
     private Account acc;
-    private Date tanggal;
+    public static Date tanggal;
 
     // constants corresponding to main menu options
     private static final int BALANCE_INQUIRY = 1;
@@ -219,17 +219,17 @@ public class ATM {
                                     bankDatabase.credit(currentAccountNumber, BIAYAADMINISTRASIMASADEPAN);
                                 } else if (bankDatabase.getAccount(currentAccountNumber).getStatus().toUpperCase().equals("BISNIS")) {
                                     bankDatabase.credit(currentAccountNumber, BIAYAADMINISTRASIBISNIS);
-                                    for (Account account : accounts) {
-                                        if (account.getStatus().toUpperCase().equals("SISWA")) {
-                                            account.setLimitCash(20);
-                                        } else if (account.getStatus().toUpperCase().equals("MASA DEPAN")) {
-                                            account.setLimitCash(100);
-                                            account.setLimitTransfer(500);
-                                        } else {
-                                            account.setLimitCash(1000);
-                                            account.setLimitTransfer(10000);
-                                        }
-                                    }
+                                }
+                            }
+                            for (Account account : accounts) {
+                                if (account.getStatus().toUpperCase().equals("SISWA")) {
+                                    account.setLimitCash(20);
+                                } else if (account.getStatus().toUpperCase().equals("MASA DEPAN")) {
+                                    account.setLimitCash(100);
+                                    account.setLimitTransfer(500);
+                                } else {
+                                    account.setLimitCash(1000);
+                                    account.setLimitTransfer(10000);
                                 }
                             }
                         } catch (ParseException ex) {
@@ -283,6 +283,7 @@ public class ATM {
                             for (History history : histories) {
                                 screen.displayMessage(history.getKeterangan() + " ");
                                 screen.displayDollarAmount(history.getAmount());
+                                screen.displayMessage(" "+String.valueOf(history.getDate()));
                                 screen.displayMessageLine("");
                             }
                         } else {
@@ -373,7 +374,7 @@ public class ATM {
                 break;
             case TRANSFER:
                 temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad);
-
+                break;
             case CHANGEPIN:
                 temp = new UbahPIN(currentAccountNumber, screen, bankDatabase, keypad);
                 break;
@@ -381,4 +382,9 @@ public class ATM {
 
         return temp;
     }
+
+    public Date getTanggal() {
+        return tanggal;
+    }
+
 }

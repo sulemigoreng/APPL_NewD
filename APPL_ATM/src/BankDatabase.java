@@ -6,6 +6,7 @@ public class BankDatabase {
     private Account[] accounts; // array of Accounts
 
     public enum Jenis {
+
         Siswa,
         Bisnis,
         Masa_Depan,
@@ -53,7 +54,6 @@ public class BankDatabase {
 //        }
 //        return false; // if no matching account was found, return null
 //    }
-
     public Account checkAccountDest(int userAccountNumberDest) {
         for (Account x : this.accounts) {
             if (x.getAccountNumber() == userAccountNumberDest) {
