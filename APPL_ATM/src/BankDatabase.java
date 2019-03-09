@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class BankDatabase {
 
-    private Account[] accounts; // array of Accounts
+    private ArrayList<Account> accounts; // array of Accounts
 
     public enum Jenis {
 
@@ -14,14 +14,14 @@ public class BankDatabase {
     }
 
     public BankDatabase() {
-        accounts = new Account[4]; // just 2 accounts for testing
-        accounts[0] = new Account(12345, 54321, 1000.0, 1200.0, false, Jenis.Siswa, new ArrayList<History>());
-        accounts[1] = new Account(8765, 5678, 200.0, 200.0, false, Jenis.Masa_Depan, new ArrayList<History>());
-        accounts[2] = new Account(0, 0, 0, 0, true, Jenis.Siswa, new ArrayList<History>());
-        accounts[3] = new Account(1, 1, 1, 1, false, Jenis.Admin);
+        accounts = new ArrayList<>();
+        accounts.add(new Account(12345, 54321, 1000.0, 1200.0, false, Jenis.Siswa, new ArrayList<History>()));
+        accounts.add(new Account(8765, 5678, 200.0, 200.0, false, Jenis.Masa_Depan, new ArrayList<History>()));
+        accounts.add(new Account(0, 0, 0, 0, true, Jenis.Siswa, new ArrayList<History>()));
+        accounts.add(new Account(1, 1, 1, 1, false, Jenis.Admin));
     }
 
-    public Account[] getAccounts() {
+    public ArrayList<Account> getAccounts() {
         return accounts;
     }
 
@@ -121,11 +121,6 @@ public class BankDatabase {
     public void addAccount(int userAccountNumber, int userAccountPIN, BankDatabase.Jenis status) {
         boolean stop = false;
         int i = 0;
-        while (!stop) {
-            if (accounts[i].equals(null)) {
-                accounts[i] = new Account(userAccountNumber, userAccountPIN, 0, 0, false, status, new ArrayList<History>());
-                stop = true;
-            }
-        }
+        accounts.add(new Account(userAccountNumber, userAccountPIN, 0, 0, false, status, new ArrayList<History>()));
     }
 }

@@ -204,7 +204,7 @@ public class ATM {
                         break;
                     case ATUR_TANGGAL:
                         try {
-                            Account[] accounts = bankDatabase.getAccounts();
+                            ArrayList<Account> accounts = bankDatabase.getAccounts();
                             DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                             String tanggalBaru;
                             screen.displayMessageLine("Tanggal Sekarang: " + format.format(tanggal));
@@ -283,7 +283,7 @@ public class ATM {
                             for (History history : histories) {
                                 screen.displayMessage(history.getKeterangan() + " ");
                                 screen.displayDollarAmount(history.getAmount());
-                                screen.displayMessage(" "+String.valueOf(history.getDate()));
+                                screen.displayMessage(" " + String.valueOf(history.getDate()));
                                 screen.displayMessageLine("");
                             }
                         } else {
@@ -317,11 +317,13 @@ public class ATM {
         ArrayList<History> histories = bankDatabase.getHistories(acc);
         if (histories != null) {
             for (History history : histories) {
-                screen.displayMessage("Number " + a + " (");
-                screen.displayMessage("" + acc + " - ");
-                screen.displayMessage("" + history.getDeposit().isValid() + " - ");
-                screen.displayDollarAmount(history.getAmount());
-                screen.displayMessageLine(")");
+                if (history.getDeposit() != null) {
+                    screen.displayMessage("Number " + a + " (");
+                    screen.displayMessage("" + acc + " - ");
+                    screen.displayMessage("" + history.getDeposit().isValid() + " - ");
+                    screen.displayDollarAmount(history.getAmount());
+                    screen.displayMessageLine(")");
+                }
                 a++;
             }
             screen.displayMessage("Input the number beside the deposit history that you would like to validate = ");
