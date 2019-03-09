@@ -279,7 +279,7 @@ public class ATM {
                         break;
                     case HISTORY:
                         ArrayList<History> histories = bankDatabase.getHistories(currentAccountNumber);
-                        if (histories != null) {
+                        if (!histories.isEmpty()) {
                             for (History history : histories) {
                                 screen.displayMessage(history.getKeterangan() + " ");
                                 screen.displayDollarAmount(history.getAmount());
@@ -315,7 +315,7 @@ public class ATM {
     private void validateDeposit(int acc) {
         int a = 1;
         ArrayList<History> histories = bankDatabase.getHistories(acc);
-        if (histories != null) {
+        if (!histories.isEmpty()) {
             for (History history : histories) {
                 if (history.getDeposit() != null) {
                     screen.displayMessage("Number " + a + " (");
@@ -331,7 +331,7 @@ public class ATM {
             History h_validate = histories.get(key - 1);
             h_validate.getDeposit().validate(h_validate.getAmount());
         } else {
-            screen.displayMessageLine("You don't have any previous transaction..");
+            screen.displayMessageLine(acc +" doesn't have any previous transaction..");
         }
     }
 
