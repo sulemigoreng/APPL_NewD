@@ -32,30 +32,19 @@ public class Transfer extends Transaction {
 
         this.userAccountDest = promptUserAccountDest();
         this.amount = promptForTransferAmount();
-        double limitTransfer = account.getLimitTransfer();
-
-        if (limitTransfer <= 0 && !account.getStatus().toUpperCase().equals("SISWA")) {
-            System.out.println("Transfer limited");
+        double tempAvailableBalance = bankDatabase.getAvailableBalance(getAccountNumber())-amount;
+        if (userAccountDest.getAccountNumber() == getAccountNumber()) {
+            screen.displayMessage("Account Destination is not Available");
         } else {
-            if (!account.getStatus().toUpperCase().equals("SISWA")) {
-                if (limitTransfer <= amount) {
-                    System.out.println("Transfer limited");
+            if (userAccountDest != null) {
+                if (tempAvailableBalance < 0) {
+                    screen.displayMessage("Balance Insufficient");
                 } else {
-                    limitTransfer -= amount;
-                    if (userAccountDest != null) {
-                        bankDatabase.transferToAccount(getAccountNumber(),
-                                userAccountDest.getAccountNumber(), amount);
-                    } else if (userAccountDest.getAccountNumber() == getAccountNumber()) {
-                        screen.displayMessage("Account Destination is not Available");
-                    }
-                }
-            } else {
-                if (userAccountDest != null) {
                     bankDatabase.transferToAccount(getAccountNumber(),
                             userAccountDest.getAccountNumber(), amount);
-                } else if (userAccountDest.getAccountNumber() == getAccountNumber()) {
-                    screen.displayMessage("Account Destination is not Available");
                 }
+            } else {
+                screen.displayMessage("Account Destination is not Available");
             }
         }
     }
