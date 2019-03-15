@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -276,19 +277,39 @@ public class ATM {
                         currentTransaction
                                 = createTransaction(mainMenuSelection);
                         currentTransaction.execute();
+                        
+                        //Date date = new GregorianCalendar(EXIT, EXIT, DEPOSIT);
                         break;
                     case HISTORY:
                         ArrayList<History> histories = bankDatabase.getHistories(currentAccountNumber);
+                        Date today = tanggal;
+                        screen.displayMessageLine(" Today : "+String.valueOf(today));
                         if (!histories.isEmpty()) {
                             for (History history : histories) {
-                                screen.displayMessage(history.getKeterangan() + " ");
-                                screen.displayDollarAmount(history.getAmount());
-                                screen.displayMessage(" " + String.valueOf(history.getDate()));
-                                screen.displayMessageLine("");
+                                //screen.displayMessageLine("Masuk..");
+                                if (history.getKeterangan().equals("Withdrawal") && history.getDate().getDate() == today.getDate()
+                                        && history.getDate().getMonth() == today.getMonth()
+                                        && history.getDate().getYear() == today.getYear()) {
+                                    //screen.displayMessageLine("Masuk..");
+                                    screen.displayMessage(history.getKeterangan() + " ");
+                                    screen.displayDollarAmount(history.getAmount());
+                                    screen.displayMessage(" " + String.valueOf(history.getDate()));
+                                    screen.displayMessageLine("");
+                                }
                             }
                         } else {
                             screen.displayMessageLine("You don't have any previous transaction..");
                         }
+//                        if (!histories.isEmpty()) {
+//                            for (History history : histories) {
+//                                screen.displayMessage(history.getKeterangan() + " ");
+//                                screen.displayDollarAmount(history.getAmount());
+//                                screen.displayMessage(" " + String.valueOf(history.getDate()));
+//                                screen.displayMessageLine("");
+//                            }
+//                        } else {
+//                            screen.displayMessageLine("You don't have any previous transaction..");
+//                        }
                         break;
                     case CHANGEPIN:
                         currentTransaction = createTransaction(mainMenuSelection);
@@ -335,7 +356,7 @@ public class ATM {
             History h_validate = histories.get(key - 1);
             h_validate.getDeposit().validate(h_validate.getAmount());
         } else {
-            screen.displayMessageLine(acc +" doesn't have any previous transaction..");
+            screen.displayMessageLine(acc + " doesn't have any previous transaction..");
         }
     }
 
@@ -392,5 +413,4 @@ public class ATM {
     public Date getTanggal() {
         return tanggal;
     }
-
 }
