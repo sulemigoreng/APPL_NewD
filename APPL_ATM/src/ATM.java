@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -285,11 +286,12 @@ public class ATM {
                             screen.displayMessageLine("1 - Today Transfer History");
                             screen.displayMessageLine("2 - Monthly Withdraw History");
                             screen.displayMessageLine("3 - All History");
-                            screen.displayMessage("Select Input : ");      
+                            screen.displayMessage("Select Input : ");
                             switch(keypad.getInput()){
                                 case 1 :
                                     for (History history : histories) {
-                                        if (history.getDate().equals(tanggal.getDate()) && history.getKeterangan().equals("Transfer")) {
+                                        if (history.getDate().getDate() == tanggal.getDate() && history.getDate().getMonth() == tanggal.getMonth()
+                                                && history.getDate().getYear() == tanggal.getYear() && history.getKeterangan().equals("Transfer")) {
                                             screen.displayMessage(history.getKeterangan() + " ");
                                             screen.displayDollarAmount(history.getAmount());
                                             screen.displayMessage(" " + String.valueOf(history.getDate()));
@@ -300,9 +302,9 @@ public class ATM {
                                 case 2 :
                                     Collections.sort(histories);
                                     screen.displayMessage("Insert the month history to see : ");
-                                    int MONTHLYHISTORY = keypad.getInput(); //ini harusnya string 
+                                    int MONTHLYHISTORY = keypad.getInput();
                                         for (History history : histories) {
-                                            if (history.getDate().getMonth().equals(MONTHLYHISTORY) && history.getKeterangan().equals("Withdraw")){
+                                            if (history.getKeterangan().equals("Withdrawal") && history.getDate().getMonth() == MONTHLYHISTORY-1){
                                                 screen.displayMessage(history.getKeterangan() + " ");
                                                 screen.displayDollarAmount(history.getAmount());
                                                 screen.displayMessage(" " + String.valueOf(history.getDate()));
