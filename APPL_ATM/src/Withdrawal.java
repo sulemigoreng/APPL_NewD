@@ -8,7 +8,8 @@ public class Withdrawal extends Transaction {
     private CashDispenser cashDispenser; // reference to cash dispenser
 
     // constant corresponding to menu option to cancel
-    private final static int CANCELED = 6;
+    private final static int CUSTOM_WITHDRAWAL = 6;
+    private final static int CANCELED = 7;
 
     // Withdrawal constructor
     public Withdrawal(int userAccountNumber, Screen atmScreen,
@@ -35,7 +36,7 @@ public class Withdrawal extends Transaction {
                 = bankDatabase.getTotalBalance(getAccountNumber());
         amount = displayMenuOfAmounts();
 
-        if (amount == 6) {
+        if (amount == 7) {
             screen.displayMessageLine("Canceling Transaction...");
         } else {
             if (limitCash <= 0) {
@@ -81,7 +82,8 @@ public class Withdrawal extends Transaction {
             screen.displayMessageLine("3 - $60");
             screen.displayMessageLine("4 - $100");
             screen.displayMessageLine("5 - $200");
-            screen.displayMessageLine("6 - Cancel transaction");
+            screen.displayMessageLine("6 - Custom amount withdrawal");
+            screen.displayMessageLine("7 - Cancel transaction");
             screen.displayMessage("\nChoose a withdrawal amount: ");
 
             int input = keypad.getInput(); // get user input through keypad
@@ -92,8 +94,12 @@ public class Withdrawal extends Transaction {
                 case 3: // corresponding amount from amounts array
                 case 4:
                 case 5:
-
                     userChoice = amounts[input]; // save user's choice
+                    break;
+                case CUSTOM_WITHDRAWAL: // custom amount withdrawal
+                    screen.displayMessage("Input amount : ");
+                    int customAmount = keypad.getInput();
+                    userChoice = customAmount;
                     break;
                 case CANCELED: // the user chose to cancel
                     userChoice = CANCELED; // save user's choice
