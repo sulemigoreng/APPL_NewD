@@ -10,7 +10,7 @@ import java.util.Date;
  *
  * @author Regawa
  */
-public class History {
+public class History implements Comparable<History> {
 
     private String keterangan;
     private double amount;
@@ -50,5 +50,14 @@ public class History {
 //    public void setsDeposit(boolean sDeposit) {
 //        this.sDeposit = sDeposit;
 //    }
+
+    @Override
+    public int compareTo(History o) {
+        if (amount > o.getAmount())
+            return 1;
+        if (amount < o.getAmount())
+            return -1;
+        return 0;
+    }
 
 }

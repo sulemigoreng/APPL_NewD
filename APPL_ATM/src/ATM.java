@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -280,11 +281,43 @@ public class ATM {
                     case HISTORY:
                         ArrayList<History> histories = bankDatabase.getHistories(currentAccountNumber);
                         if (!histories.isEmpty()) {
-                            for (History history : histories) {
-                                screen.displayMessage(history.getKeterangan() + " ");
-                                screen.displayDollarAmount(history.getAmount());
-                                screen.displayMessage(" " + String.valueOf(history.getDate()));
-                                screen.displayMessageLine("");
+                            screen.displayMessageLine("Select history :");
+                            screen.displayMessageLine("1 - Today Transfer History");
+                            screen.displayMessageLine("2 - Monthly Withdraw History");
+                            screen.displayMessageLine("3 - All History");
+                            screen.displayMessage("Select Input : ");      
+                            switch(keypad.getInput()){
+                                case 1 :
+                                    for (History history : histories) {
+                                        if (history.getDate().equals(tanggal.getDate()) && history.getKeterangan().equals("Transfer")) {
+                                            screen.displayMessage(history.getKeterangan() + " ");
+                                            screen.displayDollarAmount(history.getAmount());
+                                            screen.displayMessage(" " + String.valueOf(history.getDate()));
+                                            screen.displayMessageLine("");
+                                        }
+                                    }
+                                    break;
+                                case 2 :
+                                    Collections.sort(histories);
+                                    screen.displayMessage("Insert the month history to see : ");
+                                    int MONTHLYHISTORY = keypad.getInput(); //ini harusnya string 
+                                        for (History history : histories) {
+                                            if (history.getDate().getMonth().equals(MONTHLYHISTORY) && history.getKeterangan().equals("Withdraw")){
+                                                screen.displayMessage(history.getKeterangan() + " ");
+                                                screen.displayDollarAmount(history.getAmount());
+                                                screen.displayMessage(" " + String.valueOf(history.getDate()));
+                                                screen.displayMessageLine("");
+                                            }
+                                        }
+                                break;
+                                case 3 :
+                                    for (History history : histories) {
+                                        screen.displayMessage(history.getKeterangan() + " ");
+                                        screen.displayDollarAmount(history.getAmount());
+                                        screen.displayMessage(" " + String.valueOf(history.getDate()));
+                                        screen.displayMessageLine("");
+                                    }
+                                break;
                             }
                         } else {
                             screen.displayMessageLine("You don't have any previous transaction..");
