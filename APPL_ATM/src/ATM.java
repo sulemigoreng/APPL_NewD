@@ -287,7 +287,7 @@ public class ATM {
                         if (!histories.isEmpty()) {
                             for (History history : histories) {
                                 //screen.displayMessageLine("Masuk..");
-                                if (history.getKeterangan().equals("Withdrawal") && history.getDate().getDate() == today.getDate()
+                                if (history.getKeterangan().equals("Transfer") && history.getDate().getDate() == today.getDate()
                                         && history.getDate().getMonth() == today.getMonth()
                                         && history.getDate().getYear() == today.getYear()) {
                                     //screen.displayMessageLine("Masuk..");
@@ -302,10 +302,16 @@ public class ATM {
                         }
 //                        if (!histories.isEmpty()) {
 //                            for (History history : histories) {
-//                                screen.displayMessage(history.getKeterangan() + " ");
-//                                screen.displayDollarAmount(history.getAmount());
-//                                screen.displayMessage(" " + String.valueOf(history.getDate()));
-//                                screen.displayMessageLine("");
+//                                //screen.displayMessageLine("Masuk..");
+//                                if (history.getKeterangan().equals("Withdrawal") && history.getDate().getDate() == today.getDate()
+//                                        && history.getDate().getMonth() == today.getMonth()
+//                                        && history.getDate().getYear() == today.getYear()) {
+//                                    //screen.displayMessageLine("Masuk..");
+//                                    screen.displayMessage(history.getKeterangan() + " ");
+//                                    screen.displayDollarAmount(history.getAmount());
+//                                    screen.displayMessage(" " + String.valueOf(history.getDate()));
+//                                    screen.displayMessageLine("");
+//                                }
 //                            }
 //                        } else {
 //                            screen.displayMessageLine("You don't have any previous transaction..");
