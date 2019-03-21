@@ -110,8 +110,8 @@ public class ATM {
             if (i > 3) {
                 //Account acc = bankDatabase.getAccount(accountNumber);
                 screen.displayMessageLine("Sorry, your account has been blocked..");
-                
-                if(acc.getStatus().toUpperCase().equals("MASA_DEPAN")) {
+
+                if (acc.getStatus().toUpperCase().equals("MASA_DEPAN")) {
                     screen.displayMessageLine("To unblock account costs $2");
                 } else if (acc.getStatus().toUpperCase().equals("BISNIS")) {
                     screen.displayMessageLine("To unblock account costs $3");
@@ -140,13 +140,13 @@ public class ATM {
         // set userAuthenticated to boolean value returned by database
         accountUserBlocked
                 = bankDatabase.getAccountUser(accountNumberBlocked);
-        
+
         if (accountUserBlocked.getStatus().toUpperCase().equals("MASA_DEPAN")) {
             bankDatabase.credit(accountNumberBlocked, BIAYAUNBLOCKMASADEPAN);
         } else if (accountUserBlocked.getStatus().toUpperCase().equals("BISNIS")) {
             bankDatabase.credit(accountNumberBlocked, BIAYAUNBLOCKBISNIS);
         }
-        
+
         // check whether authentication succeeded
         if (accountUserBlocked != null) {
             accountUserBlocked.setBlocked(false);
@@ -292,24 +292,27 @@ public class ATM {
                         currentTransaction
                                 = createTransaction(mainMenuSelection);
                         currentTransaction.execute();
-                        
+
                         //Date date = new GregorianCalendar(EXIT, EXIT, DEPOSIT);
                         break;
                     case HISTORY:
                         ArrayList<History> histories = bankDatabase.getHistories(currentAccountNumber);
                         Date today = tanggal;
-                        screen.displayMessageLine(" Today : "+String.valueOf(today));
+                        screen.displayMessageLine(" Today : " + String.valueOf(today));
                         if (!histories.isEmpty()) {
                             screen.displayMessageLine("Select history :");
                             screen.displayMessageLine("1 - Today Transfer History");
                             screen.displayMessageLine("2 - Monthly Withdraw History");
                             screen.displayMessageLine("3 - All History");
                             screen.displayMessage("Select Input : ");
-                            switch(keypad.getInput()){
-                                case 1 :
+                            switch (keypad.getInput()) {
+                                case 1:
                                     for (History history : histories) {
-                                        if (history.getDate().getDate() == tanggal.getDate() && history.getDate().getMonth() == tanggal.getMonth()
-                                                && history.getDate().getYear() == tanggal.getYear() && history.getKeterangan().equals("Transfer")) {
+                                        //screen.displayMessageLine("Masuk..");
+                                        if (history.getKeterangan().equals("Transfer") && history.getDate().getDate() == today.getDate()
+                                                && history.getDate().getMonth() == today.getMonth()
+                                                && history.getDate().getYear() == today.getYear()) {
+                                            //screen.displayMessageLine("Masuk..");
                                             screen.displayMessage(history.getKeterangan() + " ");
                                             screen.displayDollarAmount(history.getAmount());
                                             screen.displayMessage(" " + String.valueOf(history.getDate()));
@@ -317,38 +320,27 @@ public class ATM {
                                         }
                                     }
                                     break;
-                                case 2 :
+                                case 2:
                                     Collections.sort(histories);
                                     screen.displayMessage("Insert the month history to see : ");
                                     int MONTHLYHISTORY = keypad.getInput();
-                                        for (History history : histories) {
-                                            if (history.getKeterangan().equals("Withdrawal") && history.getDate().getMonth() == MONTHLYHISTORY-1){
-                                                screen.displayMessage(history.getKeterangan() + " ");
-                                                screen.displayDollarAmount(history.getAmount());
-                                                screen.displayMessage(" " + String.valueOf(history.getDate()));
-                                                screen.displayMessageLine("");
-                                            }
+                                    for (History history : histories) {
+                                        if (history.getKeterangan().equals("Withdrawal") && history.getDate().getMonth() == MONTHLYHISTORY - 1) {
+                                            screen.displayMessage(history.getKeterangan() + " ");
+                                            screen.displayDollarAmount(history.getAmount());
+                                            screen.displayMessage(" " + String.valueOf(history.getDate()));
+                                            screen.displayMessageLine("");
                                         }
-                                break;
-                                case 3 :
+                                    }
+                                    break;
+                                case 3:
                                     for (History history : histories) {
                                         screen.displayMessage(history.getKeterangan() + " ");
                                         screen.displayDollarAmount(history.getAmount());
                                         screen.displayMessage(" " + String.valueOf(history.getDate()));
                                         screen.displayMessageLine("");
                                     }
-                                break;
-                            for (History history : histories) {
-                                //screen.displayMessageLine("Masuk..");
-                                if (history.getKeterangan().equals("Transfer") && history.getDate().getDate() == today.getDate()
-                                        && history.getDate().getMonth() == today.getMonth()
-                                        && history.getDate().getYear() == today.getYear()) {
-                                    //screen.displayMessageLine("Masuk..");
-                                    screen.displayMessage(history.getKeterangan() + " ");
-                                    screen.displayDollarAmount(history.getAmount());
-                                    screen.displayMessage(" " + String.valueOf(history.getDate()));
-                                    screen.displayMessageLine("");
-                                }
+                                    break;
                             }
                         } else {
                             screen.displayMessageLine("You don't have any previous transaction..");
@@ -370,6 +362,7 @@ public class ATM {
 //                            screen.displayMessageLine("You don't have any previous transaction..");
 //                        }
                         break;
+
                     case CHANGEPIN:
                         currentTransaction = createTransaction(mainMenuSelection);
                         currentTransaction.execute();
