@@ -39,6 +39,8 @@ public class ATM {
 
     private static final double BIAYAADMINISTRASIMASADEPAN = 1.0;
     private static final double BIAYAADMINISTRASIBISNIS = 5.0;
+    private static final double BIAYAUNBLOCKMASADEPAN = 2.0;
+    private static final double BIAYAUNBLOCKBISNIS = 3.0;
 
     // no-argument ATM constructor initializes instance variables
     public ATM() {
@@ -108,13 +110,19 @@ public class ATM {
             if (i > 3) {
                 //Account acc = bankDatabase.getAccount(accountNumber);
                 screen.displayMessageLine("Sorry, your account has been blocked..");
+                
+                if(acc.getStatus().toUpperCase().equals("MASA_DEPAN")) {
+                    screen.displayMessageLine("To unblock account costs $2");
+                } else if (acc.getStatus().toUpperCase().equals("BISNIS")) {
+                    screen.displayMessageLine("To unblock account costs $3");
+                }
                 acc.setBlocked(true);
             }
 
             // check whether authentication succeeded
             if (userAuthenticated) {
                 currentAccountNumber = accountNumber; // save user's account #
-                jenis = bankDatabase.getAccount(accountNumber).getStatus();
+                jenis = acc.getStatus();
             } else if (acc == null) {
                 screen.displayMessageLine(
                         "Invalid account number or PIN. Please try again.");
@@ -132,7 +140,13 @@ public class ATM {
         // set userAuthenticated to boolean value returned by database
         accountUserBlocked
                 = bankDatabase.getAccountUser(accountNumberBlocked);
-
+        
+        if (accountUserBlocked.getStatus().toUpperCase().equals("MASA_DEPAN")) {
+            bankDatabase.credit(accountNumberBlocked, BIAYAUNBLOCKMASADEPAN);
+        } else if (accountUserBlocked.getStatus().toUpperCase().equals("BISNIS")) {
+            bankDatabase.credit(accountNumberBlocked, BIAYAUNBLOCKBISNIS);
+        }
+        
         // check whether authentication succeeded
         if (accountUserBlocked != null) {
             accountUserBlocked.setBlocked(false);
