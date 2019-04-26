@@ -16,7 +16,7 @@ public class ATM {
     private Screen screen; // ATM's screen
     private Keypad keypad; // ATM's keypad
     private CashDispenser cashDispenser; // ATM's cash dispenser
-    private BankDatabase bankDatabase; // account information database
+    private BankDatabase bankDatabase = BankDatabase.getInstance(); // account information database
     private DepositSlot ATMDepositSlot;
     private String jenis;
     private Account acc;
@@ -49,7 +49,6 @@ public class ATM {
         screen = new Screen(); // create screen
         keypad = new Keypad(); // create keypad 
         cashDispenser = new CashDispenser(screen); // create cash dispenser
-        bankDatabase = new BankDatabase(); // create acct info database
         ATMDepositSlot = new DepositSlot();
         tanggal = new Date();
     }

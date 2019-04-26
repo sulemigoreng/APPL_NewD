@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 public class BankDatabase {
 
+    private static BankDatabase obj;
     private ArrayList<Account> accounts; // array of Accounts
 
     public enum Jenis {
@@ -13,12 +14,19 @@ public class BankDatabase {
         Admin
     }
 
-    public BankDatabase() {
+    private BankDatabase() {
         accounts = new ArrayList<>();
         accounts.add(new Account(12345, 54321, 1000.0, 1200.0, false, Jenis.Siswa, new ArrayList<History>()));
         accounts.add(new Account(8765, 5678, 200.0, 200.0, false, Jenis.Masa_Depan, new ArrayList<History>()));
         accounts.add(new Account(0, 0, 0, 0, true, Jenis.Siswa, new ArrayList<History>()));
         accounts.add(new Account(1, 1, 1, 1, false, Jenis.Admin));
+    }
+    
+    public static BankDatabase getInstance(){
+        if(obj==null){
+            obj = new BankDatabase();
+        }
+        return obj;
     }
 
     public ArrayList<Account> getAccounts() {
