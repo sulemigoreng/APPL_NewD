@@ -1,4 +1,5 @@
-import java.util.Date;
+package com.appl.atm.view;
+
 import java.util.Scanner;
 
 public class Keypad {
@@ -8,11 +9,15 @@ public class Keypad {
       input = new Scanner(System.in);    
    } 
 
-   public int getInput() {
+   public int getInputInt() {
       return input.nextInt(); // user enters an integer
    }
    
-   public String getDateInput(){
-      return input.nextLine();
-    }
-}
+   public String getInputStr() {
+       return input.nextLine(); // user enters an string
+   }
+   
+   public Double getInputDbl() {
+       return input.nextDouble();
+   }
+} 

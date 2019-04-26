@@ -1,5 +1,4 @@
-
-import java.util.Date;
+package com.appl.atm.view;
 
 public class Screen {
    // display a message without a carriage return
@@ -16,5 +15,4 @@ public class Screen {
    public void displayDollarAmount(double amount) {
       System.out.printf("$%,.2f", amount);   
    }
-
 } 
