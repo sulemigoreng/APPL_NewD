@@ -16,11 +16,12 @@ public class Account {
     private double limitTransfer;
     private double limitCash;
     private ArrayList<History> histories;
+    private ArrayList<Payment> payments;
 
     // Account constructor initializes attributes
     public Account(int theAccountNumber, int thePIN,
             double theAvailableBalance, double theTotalBalance,
-            boolean blocked, BankDatabase.Jenis status, ArrayList<History> histories) {
+            boolean blocked, BankDatabase.Jenis status, ArrayList<History> histories, ArrayList<Payment> payments) {
         accountNumber = theAccountNumber;
         pin = thePIN;
         availableBalance = theAvailableBalance;
@@ -28,6 +29,7 @@ public class Account {
         this.blocked = blocked;
         this.status = status.toString();
         this.histories = histories;
+        this.payments = payments;
         this.admin = admin;
 
         if (this.status.toUpperCase().equals("SISWA")) {
@@ -128,7 +130,7 @@ public class Account {
     }
 
     public void addHistory(int transaction, double amount, Deposit x) {
-        Date today= ATM.tanggal;
+        Date today = ATM.tanggal;
         String keterangan = null;
         if (transaction == 1) {
             keterangan = "Withdrawal";
@@ -152,6 +154,22 @@ public class Account {
      */
     public String getStatus() {
         return status;
+    }
+
+    public ArrayList<Payment> getPayments() {
+        return payments;
+    }
+
+    public void addPayment(String info, double amount) {
+        this.payments.add(new Payment(info, amount));
+    }
+
+    public void setAvailableBalance(double availableBalance) {
+        this.availableBalance = availableBalance;
+    }
+
+    public void setTotalBalance(double totalBalance) {
+        this.totalBalance = totalBalance;
     }
 
 }

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +29,7 @@ public class ATM {
     private static final int DEPOSIT = 3;
 
     private static final int TRANSFER = 5;
-    private static final int EXIT = 7;
+    private static final int EXIT = 8;
 
     private static final int TANGGALADMINISTRASI = 3;
     private static final int HISTORY = 6;
@@ -262,6 +263,24 @@ public class ATM {
                         double tambah = keypad.getInput();
                         cashDispenser.addCashDispenser(tambah);
                         break;
+                    case 7:
+                        ArrayList<Account> accounts = bankDatabase.getAccounts();
+                        screen.displayMessageLine("List of accounts");
+                        for (Account account : accounts) {
+                            if (!account.getStatus().toUpperCase().equals("ADMIN")) {
+                                screen.displayMessageLine(String.valueOf(account.getAccountNumber()));
+                            }
+                        }
+                        screen.displayMessageLine("--------------");
+                        screen.displayMessage("Input account number :");
+                        int accountNumber = keypad.getInput();
+                        screen.displayMessage("Input Company Bank Number :");
+                        String compBankNumber = new Scanner(System.in).next();
+                        screen.displayMessage("Input Payment Amount :");
+                        double amount = keypad.getInput();
+                        bankDatabase.getAccount(accountNumber).addPayment(compBankNumber, amount);
+                        screen.displayMessageLine("Payment successfully added to account " + accountNumber);
+                        break;
                     case EXIT: // user chose to terminate session
                         screen.displayMessageLine("\nExiting the system...");
                         userExited = true; // this ATM session should end
@@ -376,6 +395,62 @@ public class ATM {
                             screen.displayMessageLine("Sorry, you can not use this menu. Please, choose the other one.");
                         }
                         break;
+                    case 7:
+                        int index = 1;
+                        ArrayList<Payment> payments = bankDatabase.getAccount(currentAccountNumber).getPayments();
+                        if (payments.isEmpty()) {
+                            screen.displayMessageLine("You don't have any pending payment ..");
+                        } else {
+                            screen.displayMessageLine("List of pending payment..");
+                            for (Payment payment : payments) {
+                                screen.displayMessageLine("No " + index + ". Rec: " + payment.getInfo() + " - Amount: " + payment.getAmount());
+                                index++;
+                            }
+                            screen.displayMessage("Input payment number: ");
+                            int paymentNo = keypad.getInput();
+                            screen.displayMessageLine("You are about to pay payment No." + paymentNo);
+                            screen.displayMessageLine("1. Pay fully");
+                            screen.displayMessageLine("2. Pay partially");
+                            screen.displayMessage("Choose payment method (1/2): ");
+                            int payMethod = keypad.getInput();
+                            paymentNo--;
+                            double currentPaymentAmount = payments.get(paymentNo).getAmount();
+                            double currentAvailableBalance = bankDatabase.getAvailableBalance(currentAccountNumber);
+                            double currentTotalBalance = bankDatabase.getTotalBalance(currentAccountNumber);
+                            switch (payMethod) {
+                                case 1:
+                                    if (currentPaymentAmount < currentAvailableBalance) {
+                                        bankDatabase.getAccount(currentAccountNumber).setAvailableBalance(currentAvailableBalance - currentPaymentAmount);
+                                        bankDatabase.getAccount(currentAccountNumber).setTotalBalance(currentTotalBalance - currentPaymentAmount);
+                                        payments.remove(paymentNo);
+                                        screen.displayMessageLine("Payment success");
+                                    } else {
+                                        screen.displayMessageLine("Available Balance is not sufficient for this payment");
+                                    }
+                                    break;
+                                case 2:
+                                    screen.displayMessage("Input the amount you want to pay:");
+                                    double payAmount = keypad.getInput();
+                                    if (payAmount > currentAvailableBalance) {
+                                        screen.displayMessageLine("Available Balance is not sufficient for this payment");
+                                    } else if (payAmount > currentPaymentAmount) {
+                                        screen.displayMessageLine("Pay Amount exceeded the actual pending payment amount");
+                                    } else {
+                                        payments.get(paymentNo).setAmount(currentPaymentAmount - payAmount);
+                                        bankDatabase.getAccount(currentAccountNumber).setAvailableBalance(currentAvailableBalance - payAmount);
+                                        bankDatabase.getAccount(currentAccountNumber).setTotalBalance(currentTotalBalance - payAmount);
+                                        screen.displayMessageLine("Payment success");
+                                        if (payments.get(paymentNo).getAmount() == 0) {
+                                            payments.remove(paymentNo);
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    screen.displayMessageLine("Wrong input");
+                                    break;
+                            }
+                        }
+                        break;
                     case EXIT: // user chose to terminate session
                         screen.displayMessageLine("\nExiting the system...");
                         userExited = true; // this ATM session should end
@@ -415,14 +490,15 @@ public class ATM {
     // display the main menu and return an input selection
     private int displayMainMenu() {
         if (jenis.toUpperCase().equals("ADMIN")) {
-            screen.displayMessageLine("\nMain menu:");
+            screen.displayMessageLine("\nMain menu ADMIN:");
             screen.displayMessageLine("1 - Unblock Nasabah");
             screen.displayMessageLine("2 - Tambah Nasabah");
             screen.displayMessageLine("3 - Lihat Uang Dispenser");
             screen.displayMessageLine("4 - Tambah Uang Dispenser");
             screen.displayMessageLine("5 - Validasi Deposit");
             screen.displayMessageLine("6 - Atur Tanggal");
-            screen.displayMessageLine("7 - Exit\n");
+            screen.displayMessageLine("7 - Add Payment");
+            screen.displayMessageLine("8 - Exit\n");
             screen.displayMessage("Enter a choice: ");
         } else {
             screen.displayMessageLine("\nMain menu:");
@@ -431,8 +507,9 @@ public class ATM {
             screen.displayMessageLine("3 - Deposit funds");
             screen.displayMessageLine("4 - Change PIN");
             screen.displayMessageLine("5 - Transfer");
-            screen.displayMessageLine("6 - History\n");
-            screen.displayMessageLine("7 - Exit\n");
+            screen.displayMessageLine("6 - History");
+            screen.displayMessageLine("7 - Payment");
+            screen.displayMessageLine("8 - Exit\n");
 
             screen.displayMessage("Enter a choice: ");
         }

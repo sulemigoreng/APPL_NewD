@@ -1,18 +1,24 @@
+
 import java.util.Date;
 import java.util.Scanner;
 
 public class Keypad {
-   private Scanner input; // reads data from the command line
-                         
-   public Keypad() {
-      input = new Scanner(System.in);    
-   } 
 
-   public int getInput() {
-      return input.nextInt(); // user enters an integer
-   }
-   
-   public String getDateInput(){
-      return input.nextLine();
+    private Scanner input; // reads data from the command line
+
+    public Keypad() {
+        input = new Scanner(System.in);
+    }
+
+    public int getInput() {
+        return input.nextInt(); // user enters an integer
+    }
+
+    public String getDateInput() {
+        return input.next();
+    }
+    
+    public String getStringInput(){
+        return input.next();
     }
 }
